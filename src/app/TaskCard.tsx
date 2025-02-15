@@ -14,7 +14,7 @@ type TaskCardProps = {
 };
 
 const TaskCard = ({ task }: TaskCardProps) => {
-  const { title, status, description, id } = task;
+  const { title, description } = task;
 
   const { setNodeRef, transform, listeners, attributes } = useDraggable({
     id: task.id,

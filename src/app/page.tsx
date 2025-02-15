@@ -1,9 +1,12 @@
 "use client";
-import { MessageCircle, Settings, Menu, TvMinimal, Bell } from "lucide-react";
+import { MessageCircle, Settings, TvMinimal, Bell } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import Column from "./Column";
 import { DndContext, DragEndEvent, closestCorners } from "@dnd-kit/core";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store/store";
+import { updateTask } from "@/redux/TaskSlice/TaskSlice";
 
 export default function Home() {
   interface Column {
@@ -61,19 +64,16 @@ export default function Home() {
     },
   ];
 
-  const [tasks, setTasks] = useState<Task[]>(INITIAL_TASKS);
+  const tasks = useSelector((state: RootState) => state.tasks.tasks);
+  const dispatch = useDispatch();
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    console.log("Dragged from:", active.id, "Dropped on:", over?.id);
     if (!over) return;
     const taskId = active?.id as string;
     const newStatus = over?.id as Task["status"];
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === taskId ? { ...task, status: newStatus } : task
-      )
-    );
+
+    dispatch(updateTask({ id: taskId, newStatus }));
   };
 
   return (

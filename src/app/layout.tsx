@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Rajdhani } from "next/font/google";
 import "./globals.css";
+import ReduxProvider from "@/redux/ReduxProvider/ReduxProvider";
 
 const rajdhani = Rajdhani({ subsets: ["latin"], weight: "600" });
 
@@ -16,7 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={rajdhani.className}>{children}</body>
+      <body className={rajdhani.className}>
+        <ReduxProvider>{children}</ReduxProvider>
+      </body>
     </html>
   );
 }
