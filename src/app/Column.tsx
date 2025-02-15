@@ -1,4 +1,5 @@
-import { useDraggable } from "@dnd-kit/core";
+"use client";
+import { useDroppable } from "@dnd-kit/core";
 import TaskCard from "./TaskCard";
 
 interface Column {
@@ -18,7 +19,7 @@ type ColumnProps = {
 };
 
 const Column = ({ tasks, column }: ColumnProps) => {
-  const { setNodeRef } = useDraggable({ id: column.id });
+  const { setNodeRef } = useDroppable({ id: column.id });
 
   return (
     <div>

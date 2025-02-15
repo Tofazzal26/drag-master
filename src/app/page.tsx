@@ -3,7 +3,7 @@ import { MessageCircle, Settings, Menu, TvMinimal, Bell } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import Column from "./Column";
-import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import { DndContext, DragEndEvent, closestCorners } from "@dnd-kit/core";
 
 export default function Home() {
   interface Column {
@@ -65,11 +65,12 @@ export default function Home() {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+    console.log("Dragged from:", active.id, "Dropped on:", over?.id);
     if (!over) return;
-    const taskId = active.id as string;
+    const taskId = active?.id as string;
     const newStatus = over?.id as Task["status"];
-    setTasks(() =>
-      tasks.map((task) =>
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
         task.id === taskId ? { ...task, status: newStatus } : task
       )
     );
@@ -110,7 +111,10 @@ export default function Home() {
           {/* Main Content Area */}
           <main className="p-6 flex-1">
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-              <DndContext onDragEnd={handleDragEnd}>
+              <DndContext
+                collisionDetection={closestCorners}
+                onDragEnd={handleDragEnd}
+              >
                 {COLUMNS.map((column) => {
                   return (
                     <Column
