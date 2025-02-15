@@ -1,8 +1,80 @@
 "use client";
 import { MessageCircle, Settings, Menu, TvMinimal, Bell } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
+import Column from "./Column";
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
 
 export default function Home() {
+  interface Column {
+    id: string;
+    title: string;
+  }
+  interface Task {
+    id: string;
+    title: string;
+    description: string;
+    status: string;
+  }
+
+  const COLUMNS: Column[] = [
+    {
+      id: "TODO",
+      title: "To Do",
+    },
+
+    {
+      id: "IN_PROGRESS",
+      title: "In Progress",
+    },
+    {
+      id: "DONE",
+      title: "Done",
+    },
+  ];
+
+  const INITIAL_TASKS: Task[] = [
+    {
+      id: "1",
+      title: "Research Project",
+      description: "Gather requirements and create initial documentation",
+      status: "TODO",
+    },
+    {
+      id: "2",
+      title: "Research Project",
+      description: "Gather requirements and create initial documentation",
+      status: "TODO",
+    },
+
+    {
+      id: "3",
+      title: "Design System",
+      description: "Create component library and design tokens",
+      status: "IN_PROGRESS",
+    },
+    {
+      id: "4",
+      title: "API Integration",
+      description: "Implement REST API endpoints",
+      status: "DONE",
+    },
+  ];
+
+  const [tasks, setTasks] = useState<Task[]>(INITIAL_TASKS);
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over) return;
+    const taskId = active.id as string;
+    const newStatus = over?.id as Task["status"];
+    setTasks(() =>
+      tasks.map((task) =>
+        task.id === taskId ? { ...task, status: newStatus } : task
+      )
+    );
+  };
+
   return (
     <div>
       <div className="flex flex-col min-h-screen bg-gray-100">
@@ -37,7 +109,19 @@ export default function Home() {
 
           {/* Main Content Area */}
           <main className="p-6 flex-1">
-            <h2 className="">Main</h2>
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+              <DndContext onDragEnd={handleDragEnd}>
+                {COLUMNS.map((column) => {
+                  return (
+                    <Column
+                      key={column.id}
+                      tasks={tasks.filter((task) => task.status === column.id)}
+                      column={column}
+                    />
+                  );
+                })}
+              </DndContext>
+            </div>
           </main>
         </div>
       </div>
