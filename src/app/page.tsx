@@ -7,10 +7,11 @@ import { DndContext, DragEndEvent, closestCorners } from "@dnd-kit/core";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store/store";
 import { addTask, updateTask } from "@/redux/TaskSlice/TaskSlice";
-import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { Button, Dialog, DialogPanel } from "@headlessui/react";
+import toast from "react-hot-toast";
 
 export default function Home() {
-  let [isOpen, setIsOpen] = useState<boolean>(true);
+  let [isOpen, setIsOpen] = useState<boolean>(false);
 
   function open() {
     setIsOpen(true);
@@ -94,8 +95,12 @@ export default function Home() {
     const description = (
       form.elements.namedItem("description") as HTMLInputElement
     ).value;
+    if (title === "" && description === "") {
+      return toast.error(
+        "Title and description must be provided, cannot be left blank."
+      );
+    }
     const status: string = "TODO";
-    console.log({ title, description, status });
     dispatch(addTask({ title, description, status }));
   };
 
@@ -164,7 +169,6 @@ export default function Home() {
                                 placeholder="Title Here"
                                 className="outline-none px-4 py-3 w-full text-gray-500 my-2 lg:my-4"
                                 name="title"
-                                required
                               />
                             </div>
                             <div>
@@ -175,7 +179,6 @@ export default function Home() {
                                 rows={4}
                                 name="description"
                                 placeholder="Description"
-                                required
                               ></textarea>
                               <div className="text-right mt-1 lg:mt-2">
                                 <button

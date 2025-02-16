@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Rajdhani } from "next/font/google";
 import "./globals.css";
 import ReduxProvider from "@/redux/ReduxProvider/ReduxProvider";
-
+import { Toaster } from "react-hot-toast";
 const rajdhani = Rajdhani({ subsets: ["latin"], weight: "600" });
 
 export const metadata: Metadata = {
@@ -19,6 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={rajdhani.className}>
         <ReduxProvider>{children}</ReduxProvider>
+        <Toaster />
       </body>
     </html>
   );
