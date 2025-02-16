@@ -24,7 +24,7 @@ const Column = ({ tasks, column }: ColumnProps) => {
   return (
     <div>
       <div className="shadow-lg rounded-lg p-6 bg-white">
-        <h2 className="text-3xl">{column.title}</h2>
+        <h2 className="text-xl lg:text-3xl">{column.title}</h2>
         <div ref={setNodeRef}>
           {tasks.map((task) => (
             <TaskCard key={task?.id} task={task} />

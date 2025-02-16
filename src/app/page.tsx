@@ -6,9 +6,20 @@ import Column from "./Column";
 import { DndContext, DragEndEvent, closestCorners } from "@dnd-kit/core";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store/store";
-import { updateTask } from "@/redux/TaskSlice/TaskSlice";
+import { addTask, updateTask } from "@/redux/TaskSlice/TaskSlice";
+import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 
 export default function Home() {
+  let [isOpen, setIsOpen] = useState<boolean>(true);
+
+  function open() {
+    setIsOpen(true);
+  }
+
+  function close() {
+    setIsOpen(false);
+  }
+
   interface Column {
     id: string;
     title: string;
@@ -76,6 +87,18 @@ export default function Home() {
     dispatch(updateTask({ id: taskId, newStatus }));
   };
 
+  const handleTaskAdd = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const title = (form.elements.namedItem("title") as HTMLInputElement).value;
+    const description = (
+      form.elements.namedItem("description") as HTMLInputElement
+    ).value;
+    const status: string = "TODO";
+    console.log({ title, description, status });
+    dispatch(addTask({ title, description, status }));
+  };
+
   return (
     <div>
       <div className="flex flex-col min-h-screen bg-gray-100">
@@ -109,7 +132,68 @@ export default function Home() {
           </aside>
 
           {/* Main Content Area */}
-          <main className="p-6 flex-1">
+          <main className="p-3 lg:p-6 flex-1">
+            <div className="flex lg:flex-row flex-col lg:mb-6 mb-3 justify-between lg:items-center">
+              <h2 className="text-xl lg:text-2xl">Teaching Activities</h2>
+              <div>
+                <Button
+                  onClick={open}
+                  className="rounded-md bg-[#7498fb] py-2 px-4 text-sm lg:text-base font-medium text-white focus:outline-none data-[hover]:bg-black/30 data-[focus]:outline-1 data-[focus]:outline-white"
+                >
+                  Add Task
+                </Button>
+
+                <Dialog
+                  open={isOpen}
+                  as="div"
+                  className="relative z-10 focus:outline-none"
+                  onClose={close}
+                >
+                  <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+                    <div className="flex min-h-full items-center justify-center p-4">
+                      <DialogPanel
+                        transition
+                        className="w-full lg:max-w-lg rounded-xl bg-white/5 p-6 text-black backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0 shadow-lg"
+                      >
+                        <div>
+                          <form onSubmit={handleTaskAdd}>
+                            <div>
+                              <label className="text-xl">Title</label> <br />
+                              <input
+                                type="text"
+                                placeholder="Title Here"
+                                className="outline-none px-4 py-3 w-full text-gray-500 my-2 lg:my-4"
+                                name="title"
+                                required
+                              />
+                            </div>
+                            <div>
+                              <label className="text-xl">Description</label>{" "}
+                              <br />
+                              <textarea
+                                className="outline-none px-4 py-3 w-full text-gray-500 lg:mt-4 mt-2"
+                                rows={4}
+                                name="description"
+                                placeholder="Description"
+                                required
+                              ></textarea>
+                              <div className="text-right mt-1 lg:mt-2">
+                                <button
+                                  onClick={() => close()}
+                                  className="rounded-md bg-[#7498fb] py-2 px-4 text-sm lg:text-base font-medium text-white focus:outline-none data-[hover]:bg-black/30 data-[focus]:outline-1 data-[focus]:outline-white"
+                                >
+                                  Add
+                                </button>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </DialogPanel>
+                    </div>
+                  </div>
+                </Dialog>
+              </div>
+            </div>
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
               <DndContext
                 collisionDetection={closestCorners}

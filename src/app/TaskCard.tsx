@@ -33,8 +33,10 @@ const TaskCard = ({ task }: TaskCardProps) => {
         style={style}
         className="bg-gray-100 rounded-lg my-6 p-8 shadow-lg"
       >
-        <h2 className="text-xl">{title}</h2>
-        <h2 className="text-base mt-2 text-gray-600">{description}</h2>
+        <h2 className="text-lg lg:text-xl">{title}</h2>
+        <h2 className="text-sm lg:text-base mt-2 text-gray-600">
+          {description}
+        </h2>
       </div>
     </div>
   );

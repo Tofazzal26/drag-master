@@ -7,6 +7,12 @@ interface Task {
   status: string;
 }
 
+interface AddTask {
+  title: string;
+  description: string;
+  status: string;
+}
+
 interface TaskState {
   tasks: Task[];
 }
@@ -38,8 +44,13 @@ export const TaskSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
-    addTask: (state, action: PayloadAction<Task>) => {
-      state.tasks.push(action.payload);
+    addTask: (state, action: PayloadAction<AddTask>) => {
+      const id = (
+        state.tasks.length
+          ? Number(state.tasks[state.tasks.length - 1].id) + 1
+          : 0
+      ).toString();
+      state.tasks.push({ id, ...action.payload });
     },
     updateTask: (
       state,
