@@ -11,7 +11,7 @@ import { Button, Dialog, DialogPanel } from "@headlessui/react";
 import toast from "react-hot-toast";
 
 export default function Home() {
-  let [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   function open() {
     setIsOpen(true);
@@ -45,34 +45,6 @@ export default function Home() {
     {
       id: "DONE",
       title: "Done",
-    },
-  ];
-
-  const INITIAL_TASKS: Task[] = [
-    {
-      id: "1",
-      title: "Research Project",
-      description: "Gather requirements and create initial documentation",
-      status: "TODO",
-    },
-    {
-      id: "2",
-      title: "Research Project",
-      description: "Gather requirements and create initial documentation",
-      status: "TODO",
-    },
-
-    {
-      id: "3",
-      title: "Design System",
-      description: "Create component library and design tokens",
-      status: "IN_PROGRESS",
-    },
-    {
-      id: "4",
-      title: "API Integration",
-      description: "Implement REST API endpoints",
-      status: "DONE",
     },
   ];
 
